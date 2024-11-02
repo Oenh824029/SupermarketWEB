@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using SupermarketWEB.Data;
 using SupermarketWEB.Models;
 
-namespace SupermarketWEB.Pages.PayModes
+namespace SupermarketWEB.Pages.Provider
 {
     public class EditModel : PageModel
     {
@@ -17,20 +16,20 @@ namespace SupermarketWEB.Pages.PayModes
         }
 
         [BindProperty]
-        public PayMode PayMode { get; set; } = default!;
+        public Providers Provider { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var paymode = await _context.PayModes.FirstOrDefaultAsync(m => m.Id == id);
-            if (paymode == null)
+            var provider = await _context.Providers.FirstOrDefaultAsync(m => m.Id == id);
+            if (provider == null)
             {
                 return NotFound();
             }
 
-            PayMode = paymode;
+            Provider = provider;
             return Page();
         }
 
@@ -41,7 +40,7 @@ namespace SupermarketWEB.Pages.PayModes
                 return Page();
             }
 
-            _context.Attach(PayMode).State = EntityState.Modified;
+            _context.Attach(Provider).State = EntityState.Modified;
 
             try
             {
@@ -49,7 +48,7 @@ namespace SupermarketWEB.Pages.PayModes
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PayModeExists(PayMode.Id))
+                if (!ProviderExists(Provider.Id))
                 {
                     return NotFound();
                 }
@@ -61,9 +60,9 @@ namespace SupermarketWEB.Pages.PayModes
             return RedirectToPage("./Index");
         }
 
-        private bool PayModeExists(int id)
+        private bool ProviderExists(int id)
         {
-            return (_context.PayModes?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Providers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
 
